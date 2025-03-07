@@ -1,0 +1,6 @@
+{
+    "files.autoSave": "onWindowChange",
+    "diffEditor.codeLens": true,
+    "accessibility.verbosity.comments": true,
+    
+}
