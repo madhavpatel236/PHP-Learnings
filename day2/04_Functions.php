@@ -2,17 +2,18 @@
 
 echo "Hello World <br /> ";
 
-function Avaerage($marksArray){
+function Avaerage($marksArray)
+{
     $total = 0;
-    $i = 1 ;
-    foreach($marksArray as $eachSubMarks){
-        $total+= $eachSubMarks;
-        $avg = $total/$i;
+    $i = 1;
+    foreach ($marksArray as $eachSubMarks) {
+        $total += $eachSubMarks;
+        $avg = $total / $i;
         return $avg;
     }
 }
 
-$marksArray = [95,96,94];
+$marksArray = [95, 96, 94];
 $Average = Avaerage($marksArray);
 echo " Average of the marks is $Average <br /> ";
 
@@ -22,19 +23,18 @@ echo "File created successfully at 0_madhav.php. <br />";
 
 
 // Anonmotion function
-$greet = function($name) {
-    printf("Hello %s\r\n",  $name );
+$greet = function ($name) {
+    printf("Hello %s\r\n",  $name);
     echo "<br />";
 };
 
 $greet('World');
-$greet(name: 'PHP');
+$greet('PHP');
 
 
 // Arrow function
 $a = 1;
-$Arrow = fn( $a ) => $a + 1  ;
+$Arrow = function ($a) {
+    return $a + 1;
+};
 echo $Arrow($a);
-
-
-?>

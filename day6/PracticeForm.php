@@ -82,7 +82,7 @@
                 //     "Email: " + email;
                 // if (validateRes) $("#empty_div").html(`<h3> ${displayText} </h3>`);
 
-                $.ajax({
+                if (validateRes) {$.ajax({
                     url: "Process.php",
                     type: "POST",
                     data: {
@@ -91,10 +91,10 @@
                         email: $("#email").val()
                     },
                     success: function(res) {
-                        $("#empty_div").html(`<h3>${res}</h3>`); 
+                        $("#empty_div").html(`<h3>${res}</h3>`);
                         // window.location.href = "Process.php";
                     },
-                });
+                })}
             })
         })
     </script>
@@ -106,3 +106,4 @@
 
 
 </html>
+
