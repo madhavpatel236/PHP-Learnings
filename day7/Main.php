@@ -11,10 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif (isset($_POST['delete_lname'])) {
         $_SESSION['lastname'] = '';
     } elseif(isset($_POST['edit_fname'])){
-
+        
     }
-
-
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
 }
@@ -42,9 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <h2>Stored Data</h2>
         <span>First Name: <strong> <?php echo htmlspecialchars($_SESSION['firstname']); ?> </strong> </span>
+        <button type="submit" name="edit_fname">Edit</button>
         <button type="submit" name="delete_fname"> Delete </button> <br /><br />
 
         <span>Last Name: <strong> <?php echo htmlspecialchars($_SESSION['lastname']); ?> </strong> </span>
+        <button type="submit" name="edit_lname">Edit</button>
         <button type="submit" name="delete_lname"> Delete </button>
 
     </form>
