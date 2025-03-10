@@ -26,7 +26,7 @@ if (isset($_GET['edit'])) { // now here we check that in the URL we have ?edit= 
 }
 
 // for the delete item
-function deleteItem($id)
+    function deleteItem($id)
 {
     unset($_SESSION['items'][$id]);
 }

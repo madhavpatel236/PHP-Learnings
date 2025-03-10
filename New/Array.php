@@ -1,5 +1,10 @@
 <?php
 
+
+// $fruits = array("apple", "orange", array("pear", "mango"),"banana" );
+// echo (count($fruits,1));
+
+
 // Array: 
 $fname = array("A", "cat", "dog", "A", "dog");
 $age = array("A", "A", "cat", "A", "tiger");
@@ -18,3 +23,6 @@ $a3 = array("i" => "orange");
 $a4 = array_merge($a2, $a3);
 $result = array_diff($a1, $a4);
 print_r($result);
+
+
+?>
