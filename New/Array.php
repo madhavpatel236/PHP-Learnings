@@ -16,7 +16,6 @@ $arrayMerge =  array_merge($fname, $age);
 print_r($arrayMerge);
 
 
-
 $a1 = array("a" => "red", "b" => "green", "c" => "blue", "d" => "yellow");
 $a2 = array("e" => "red", "f" => "green", "g" => "blue", "h" => "orange");
 $a3 = array("i" => "orange");

@@ -1,20 +1,18 @@
 <?php
+function exclaim($str) {
+  return $str . "! ";
+}
 
-// Array: 
-$fname = array("A", "cat", "dog", "A", "dog");
-$age = array("A", "A", "cat", "A", "tiger");
-$c = array_combine($fname, $age);
-$d = array_count_values($c);
-print_r($c);
-print_r($d);
-$arrayMerge =  array_merge($fname, $age);
-print_r($arrayMerge);
+function ask($str) {
+  return $str . "? ";
+}
 
+function printFormatted($str, $format) {
+  // Calling the $format callback function
+  echo $format($str);
+}
 
-
-$a1 = array("a" => "red", "b" => "green", "c" => "blue", "d" => "yellow");
-$a2 = array("e" => "red", "f" => "green", "g" => "blue", "h" => "orange");
-$a3 = array("i" => "orange");
-$a4 = array_merge($a2, $a3);
-$result = array_diff($a1, $a4);
-print_r($result);
+// Pass "exclaim" and "ask" as callback functions to printFormatted()
+printFormatted("Hello world", "exclaim");
+printFormatted("Hello world", "ask");
+?>
