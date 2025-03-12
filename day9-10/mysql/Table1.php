@@ -2,7 +2,7 @@
 
 $host = "localhost";
 $username = "root";
-$password = "Madhav@123"; // Root@123456 
+$password = "Madhav@123";  
 $dbname = "firstDB";
 
 
@@ -16,7 +16,7 @@ if ($isConnect->connect_error) {
 echo "Connected successfully <br/>";
 
 
-// create the database:
+// create the table:
 $sql = "CREATE TABLE IF NOT EXISTS Teams (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(20) NOT NULL,
@@ -37,6 +37,7 @@ if ($isConnect->query($insertData) === TRUE) {
 } else {
     echo "Data not entered in the Table" . $isConnect->error . "<br/>";
 }
+
 
 
 

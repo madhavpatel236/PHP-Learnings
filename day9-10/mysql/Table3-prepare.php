@@ -31,14 +31,24 @@ if ($isConnect->query($table) === TRUE) {
 
 // prepare 
 $prep = $isConnect->prepare("INSERT INTO Trophies (Team, Number) VALUES (?, ?)");
-$prep->bind_param("si", $Team, $Number);  // si = srting, integer-> tell the datatype.
+$prep->bind_param("si", $Team, $Number);  // si = srting, integer -> tell the datatype.
 
 // set parameters and execute
 $Team = "RCB";
 $Number = 0;
 $prep->execute();
+echo "New records created sucessfully <br/>";
 
-echo "New records created sucessfully";
+$Team = "CSK";
+$Number = 5;
+$prep->execute();
+echo "New records created sucessfully <br/>";
+
+$Team = "MI";
+$Number = 5;
+$prep->execute();
+
+echo "New records created sucessfully <br/>";
 
 $prep->close();
 $isConnect->close();
