@@ -1,6 +1,5 @@
 <!--  Database -->
 <?php
-
 $host = "localhost";
 $username = "root";
 $password = "Madhav@123";
@@ -109,9 +108,16 @@ $isConnect->close();
                 }
             }
         })
+
+        // $.ajex({
+        //     url: "Process.php",
+        //     type: "POST",
+        //     data: {
+        //     }
+        // })
+
     })
 </script>
-
 
 
 <?php
@@ -131,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (isset($_POST['save_btn'])) {
         // get the data from the database
-        $data = "SELECT * FROM  form_data    ORDER BY id DESC LIMIT 1 ";
+        $data = "SELECT * FROM form_data ORDER BY id DESC LIMIT 1 ";
         $res = $isConnect->query($data);
 
         if ($res === FALSE) {
@@ -143,11 +149,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     echo "FirstName: " . $row["firstname"] . "<br/>" . " Last Name: " . $row["lastname"] . "<br/>" . " Email ID: " . $row["email"] . "<br/>";
                 }
             } else {
-                echo "hello";
+                echo "ERROR: " . $isConnect->error ;
             }
         }
     }
 }
 ?>
+
+
 
 </html>
