@@ -2,7 +2,7 @@
 
 $host = "localhost";
 $username = "root";
-$password = "Root@123456"; // Root@123456 
+$password = "Madhav@123"; // Root@123456 
 $dbname = "firstDB";
 
 
@@ -28,7 +28,6 @@ if ($isConnect->query($sql) === TRUE) {
 } else {
     echo "Error in creating table: " . $isConnect->error . "<br/>";
 }
-
 
 // Insert the data into the database:
 $insertData = " INSERT INTO Teams (id, name, player ) VALUES (3, 'MI', 'Rohit Sharma')";

@@ -2,7 +2,7 @@
 
 $host = "localhost";
 $username = "root";
-$password = "Root@123456";
+$password = "Madhav@123";
 $dbname = "firstDB";
 
 $isConnect = new mysqli($host, $username, $password, $dbname);
@@ -19,7 +19,7 @@ $create_table = "CREATE TABLE IF NOT EXISTS Grounds (
     TeamHomeGround VARCHAR(20) NOT NULL,
     PRIMARY KEY (TeamId)
 )";
-if ($isConnect->query($create_table)) {
+if ($isConnect->query($create_table) === TRUE) {
     echo "Table Created sucessfully <br/>";
 } else {
     echo "Table was not created!" . $isConnect->error . "<br/>";
@@ -27,14 +27,25 @@ if ($isConnect->query($create_table)) {
 
 
 // insert a table data
-$insert_data = "INSERT INTO Grounds (TeamId, TeamHomeGround) VALUES ( 2 , 'Banglore' ) ";
+// $insert_data = "INSERT INTO Grounds (TeamId, TeamHomeGround) VALUES ( 3 , 'Banglore' ) ";
 
-if ($isConnect->query($insert_data)) {
-    echo "data sucessfully entered in the table <br/>";
+// if ($isConnect->query($insert_data)) {
+//     echo "data sucessfully entered in the table <br/>";
+// } else {
+//     echo "Data was not added in the Table." . $isConnect->error . "<br/>";
+// }
+
+
+
+// Insert multiple data
+$insert_multiple_data = " INSERT INTO Grounds (TeamId, TeamHomeGround) VALUES ( 1, 'Banglore');";
+$insert_multiple_data .= " INSERT INTO Grounds (TeamId, TeamHomeGround) VALUES ( 2, 'Channai');";
+$insert_multiple_data .= " INSERT INTO Grounds (TeamId, TeamHomeGround) VALUES ( 3, 'Mumbai')"; 
+if ($isConnect->multi_query($insert_multiple_data) === TRUE) {
+    echo " Inserted multiple data in the database. <br/> ";
 } else {
-    echo "Data was not added in the Table." . $isConnect->error . "<br/>";
+    echo " Don't inserted multiple data in the table" . $isConnect->error . "<br/>";
 }
-
 
 // add a FOREIGN KEY on ALTER TABLE:
 $addForKey = "ALTER TABLE Grounds 

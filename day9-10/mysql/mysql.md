@@ -38,3 +38,17 @@ $stmt = $pdo->prepare("SELECT * FROM users");
 $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 ```
+
+
+- Constraints: NOT NULL, UNIQUE, PRIMERY KEY, FOREIGN KEY, CHECK, DEFAULT, CREATE INDEX
+
+- CREATE DATABASE IF NOT EXISTS db_name
+- CREATE TABLE table_name (col1, col2,..) VALUES (val1, val2, ...)
+- INSERT INTO table_name (col1, col2, ..) VALUES (val1, val2,..)
+- DROP TABLE table_name
+- ALTER TABLE table_name ADD columan_name datatype
+- ALTER TABLE table_name  DROP COLUMN column_name
+- ALTER TABLE table_name MODIFY COLUMN col_name datatype
+- $last_id = $isConnect->insert_id: Get the last entered data id
+- $conn->multi_query($sql) === TRUE : multiple rows(data) entered in the table.
+
