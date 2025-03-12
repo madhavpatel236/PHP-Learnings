@@ -15,7 +15,7 @@ $row = $result->fetch_assoc();
 
 - Uses traditional function calls
 - Works only with MySQL databases
-- Similar to old mysql\_\* functions
+- Similar to old mysql functions
 - Simpler to understand for beginners
 
 ```php
@@ -57,6 +57,10 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 - DELETE FROM table_name WHERE some_column = some_value 
 - UPDATE table_name SET col=val WHERE conditions
 - SELECT * FROM table_name LIMIT 10 OFFSET 11
+- SELECT MIN(column_name) FROM table_name WHERE condition; 
+- SELECT COUNT(column_name) FROM table_name WHERE condition; // The COUNT() function returns the number of rows that matches a specified criterion. 
+- SELECT AVG(column_name) FROM table_name WHERE condition; // The AVG() function returns the average value of a numeric column. 
+- SELECT SUM(column_name) FROM table_name WHERE condition; // The SUM() function returns the total sum of a numeric column.  
 
 
 - prepare(): $prep = $isConnect->prepare("INSERT INTO table_name (col1, col2) VALUES (?, ?)");
@@ -66,5 +70,3 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 - num_rows(): $res->num_rows : To find the number of rows in the $res( $res = $isConnect->query($selectData);)
 - fetch_assoc(): ($row = $res->fetch_assoc()): fetch_assoc => fetch a single row from the result, set and return as an associative array where the key is associative array in the table. The function returns each row as an associative array, meaning that each element in the array has a key-value pair, where the key is the column name (e.g., "id", "name") and the value is the data in that column for the current row
 
-
-    - Make a form using this properties and store the data in the database.  

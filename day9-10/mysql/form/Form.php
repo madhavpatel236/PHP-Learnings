@@ -4,6 +4,8 @@ $host = "localhost";
 $username = "root";
 $password = "Madhav@123";
 $dbname = "Form_Record";
+$arr = [];
+$flag = false;
 
 $isConnect = new mysqli($host, $username, $password, $dbname);
 if ($isConnect->connect_error) {
@@ -13,8 +15,8 @@ if ($isConnect->connect_error) {
 }
 
 // create table
-$create_table = " CREATE TABLE IF NOT EXISTS form_data(
-    id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY ,
+$create_table = "CREATE TABLE IF NOT EXISTS form_data(
+    id INT(10) AUTO_INCREMENT PRIMARY KEY,
     firstname VARCHAR(20) NOT NULL,
     lastname VARCHAR(20) NOT NULL,
     email VARCHAR(30) UNIQUE NOT NULL  
@@ -28,9 +30,9 @@ if ($isConnect->query($create_table) === FALSE) {
 // Insert the details in the database.
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $email = $_POST['email'];
+    $_SESSION['firstname'] = $firstname = $_POST['firstname'];
+    $_SESSION['lastname'] = $lastname = $_POST['lastname'];
+    $_SESSION['email'] = $email = $_POST['email'];
 
     if (isset($_POST['save_btn'])) {
         // Insert data into the database
@@ -39,6 +41,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo " <script> console.log('There are some issue for insert the data into database:') </script> ";
         } else {
             echo " <script> console.log( 'data inserted into the database sucessfully.' ); </script> ";
+        }
+
+        // get the data from the database
+        $data = "SELECT * FROM form_data ORDER BY id DESC LIMIT 1 ";
+        $res = $isConnect->query($data);
+        if ($res === FALSE) {
+            echo "don't get a data" . $isConnect->error;
+        } else {
+            echo " <script> console.log('get the data') </script>";
+            if ($res->num_rows >= 0) {
+                while ($row = $res->fetch_assoc()) {
+                    // echo "FirstName: " . $row["firstname"] . "<br/>" . " Last Name: " . $row["lastname"] . "<br/>" . " Email ID: " . $row["email"] . "<br/>";
+                    $arr = $row;
+                    $flag = true;
+                    // var_dump($arr);
+                }
+            } else {
+                echo "ERROR: " . $isConnect->error;
+            }
         }
     }
 }
@@ -72,8 +93,13 @@ $isConnect->close();
 
         <button name="save_btn" class="submit_btn" type="submit">Save</button>
     </form>
-</body>
 
+    <containor style="<?php echo $flag ? 'display:block;' : 'display:none;'   ?>">
+        <div> First Name: <span class="res_firstname"> <?php echo htmlspecialchars($arr['firstname']); ?> </span> </div>
+        <div> Last Name: <span class="res_firstname"> <?php echo htmlspecialchars($arr['lastname']); ?> </span> </div>
+        <div> Email: <span class="res_firstname"> <?php echo htmlspecialchars($arr['email']); ?> </span> </div>
+    </containor>
+</body>
 
 <!-- validation using jquery -->
 <script>
@@ -108,54 +134,20 @@ $isConnect->close();
                 }
             }
         })
+        $.ajax({
+            url: "Status.php",
+            type: "POST",
+            data: {
+                firstname: "<?php echo $arr['firstname']; ?>",
+                lastname: "<?php echo $arr['lastname']; ?>",
+                email: "<?php echo $arr['email']; ?>"
+            },
+            success: function(data) {
+                alert(data);
+            },
+        });
 
-        // $.ajex({
-        //     url: "Process.php",
-        //     type: "POST",
-        //     data: {
-        //     }
-        // })
-
-    })
+    });
 </script>
-
-
-<?php
-$host = "localhost";
-$username = "root";
-$password = "Madhav@123";
-$dbname = "Form_Record";
-
-$isConnect = new mysqli($host, $username, $password, $dbname);
-if ($isConnect->connect_error) {
-    die("Connection failed: " . $isConnect->connect_error);
-} else {
-    echo "<script> console.log('Connection Sucessfull ')</script>";
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    if (isset($_POST['save_btn'])) {
-        // get the data from the database
-        $data = "SELECT * FROM form_data ORDER BY id DESC LIMIT 1 ";
-        $res = $isConnect->query($data);
-
-        if ($res === FALSE) {
-            echo "don't get a data" . $isConnect->error;
-        } else {
-            echo " <script> console.log('get the data') </script>";
-            if ($res->num_rows >= 0) {
-                while ($row = $res->fetch_assoc()) {
-                    echo "FirstName: " . $row["firstname"] . "<br/>" . " Last Name: " . $row["lastname"] . "<br/>" . " Email ID: " . $row["email"] . "<br/>";
-                }
-            } else {
-                echo "ERROR: " . $isConnect->error ;
-            }
-        }
-    }
-}
-?>
-
-
 
 </html>
