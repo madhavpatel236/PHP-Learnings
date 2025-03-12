@@ -1,1 +1,3 @@
-[x]
+- MySQLi (object-oriented)
+- MySQLi (procedural)
+- PDO

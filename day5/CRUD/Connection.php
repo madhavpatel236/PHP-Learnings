@@ -10,8 +10,6 @@ $isConnect = mysqli_connect($host, $username, $password, $database);
 
 if ($isConnect) {
     echo " Database sucessfully connected";
-}
-else{
+} else {
     echo "Database Not Connected";
 }
-?>
