@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // SELECT data
-        $selectData = " SELECT * FROM Data ORDER BY Id DESC ";
+        $selectData = " SELECT * FROM Data ORDER BY Id DESC LIMIT 1 ";
         $val = $isConnect->query($selectData);
         if ($val->num_rows > 0) {
             echo "<script> console.log('Data selected sucessfully!') </script>";
@@ -164,9 +164,6 @@ function test_data($data)
 
 <body>
     <form method="post">
-
-        <input  id="user_id" type="hidden" />
-
         <lable for="firstname"> First Name: </lable>
         <input id="firstname" name="firstname" type="text" />
         <span class="error"> <?php echo $fname_error; ?></span><br /><br />
