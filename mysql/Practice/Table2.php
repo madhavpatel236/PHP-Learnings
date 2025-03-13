@@ -27,7 +27,7 @@ if ($isConnect->query($create_table) === TRUE) {
 
 
 // insert a table data
-// $insert_data = "INSERT INTO Grounds (TeamId, TeamHomeGround) VALUES ( 3 , 'Banglore' ) ";
+// $insert_data = "INSERT INTO Grounds (TeamId, TeamHomeGround) VALUES ( 5 , 'Rajasthan ' ) ";
 
 // if ($isConnect->query($insert_data)) {
 //     echo "data sucessfully entered in the table <br/>";
@@ -99,7 +99,6 @@ if ($res3->num_rows >= 0) {
 
 
 // Delete the data
-
 $delete = " DELETE FROM Teams WHERE name = 'CSK'";
 
 if ($isConnect->query($delete) === TRUE) {
@@ -119,26 +118,85 @@ if ($isConnect->query($update) === TRUE) {
 
 
 
-
-
 // limit the data section
 // Assuming $isConnect is your MySQLi connection
-$limit = "SELECT * FROM Trophies LIMIT 2 OFFSET 3";
-$resNew = $isConnect->query($limit);
+// $limit = "SELECT * FROM Trophies LIMIT 2 OFFSET 3";
+// $resNew = $isConnect->query($limit);
 
-if ($resNew !== FALSE) { 
-    echo "Limit was put <br/>";
+// if ($resNew !== FALSE) {
+//     echo "Limit was put <br/>";
 
-    if ($resNew->num_rows >= 0) {
-        while ($row = $resNew->fetch_assoc()) {
-            echo "Team: " . $row['Team'] . " | Player: " . $row['Number'] . "<br/>";
-        }
-    } else {
-        echo "No records found.<br/>" . $isConnect -> error ;
+//     if ($resNew->num_rows >= 0) {
+//         while ($row = $resNew->fetch_assoc()) {
+//             echo "Team: " . $row['Team'] . " | Player: " . $row['Number'] . "<br/>";
+//         }
+//     } else {
+//         echo "No records found.<br/>" . $isConnect->error;
+//     }
+// } else {
+//     echo "Limit was not able to be put: " . $isConnect->error . "<br/>";
+// }
+
+
+
+
+// Like
+// $like = "SELECT * FROM Grounds WHERE TeamHomeGround LIKE 'G%' "; // start the text with the G and then...
+// $like = "SELECT * FROM Grounds WHERE TeamHomeGround LIKE '%i' "; // end of the char is need to be 'a'.
+// $like = "SELECT * FROM Grounds WHERE TeamHomeGround LIKE '%an%' "; // tech which has 'an' together in any position in the selected data.
+// $like = "SELECT * FROM Grounds WHERE TeamHomeGround LIKE '_u%' "; // match the word in which 'u' is in the second position.
+// $like = " SELECT * FROM Grounds WHERE TeamHomeGround LIKE 'G_%'"; // match the word which is start with the G and have atleast 2 char in that word.
+// $like = " SELECT * FROM Grounds WHERE TeamHomeGround LIKE '__a%' "; // match the word in which 'a' is in the 3rd poition.
+// $like = "SELECT * FROM Grounds WHERE TeamHomeGround LIKE 'M__%' "; // match the word in which word should be start with the "M" and there have min 3 char in that word.
+// $like = " SELECT * FROM Grounds WHERE TeamHomeGround LIKE 'G%t' "; // match the word which is start with the 'G' and end with the 't'.
+// $like = "SELECT * FROM Grounds WHERE TeamHomeGround LIKE '_ujrat' "; // match the word which is start with the any char but from the follwing char is 'ujrat' there are no other char allowed at the end out of this.
+$like = " SELECT * FROM Grounds WHERE TeamHomeGround LIKE 'G_j__t' ";
+
+$find_pattern = $isConnect->query($like);
+if ($find_pattern->num_rows > 0) {
+    echo " find the Grounds based on the LIKE condition,  ";
+    while ($row = $find_pattern->fetch_assoc()) {
+        echo "Matched text is: " . $row['TeamHomeGround'] . ", ";
     }
 } else {
-    echo "Limit was not able to be put: " . $isConnect->error . "<br/>";
+    echo "We cannot find the ground based on the like condition: " . $isConnect->error . "<br/>";
 }
+
+
+
+
+// IN
+$in = " SELECT * FROM Teams WHERE name IN ('RCB', 'MI') ";
+$findIn = $isConnect->query($in);
+
+if ($findIn->num_rows > 0) {
+    echo "<br/> There are some players which satisfy the IN condition: <br/> ";
+    while ($row = $findIn->fetch_assoc()) {
+        echo "Player: " . $row['Player'] . " ID: " . $row['id'] .  "<br/> ";
+    }
+} else {
+    echo "We cannot find the data based on the IN condition: " . $isConnect->error . "<br/>" ;
+}
+
+
+// BETWEEN:
+// $between = "SELECT id FROM Teams WHERE id BETWEEN 1 AND 3";
+// $findval = $isConnect->query($between);
+
+// if($findval->num_rows > 0){
+//     echo "We find the data based on the BETWEEN condition: " ;
+//     while($row = $findval->fetch_assoc()){
+//         echo "data: " . $row['Player'] . "-" . $row['name']  ;
+//     }
+// } else{
+//     echo " We are not be able to find the data based on the BETWEEN condition: " . $isConnect->error ;
+// } 
+
+
+
+
+
+
 
 
 

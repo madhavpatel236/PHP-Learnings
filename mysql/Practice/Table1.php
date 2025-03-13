@@ -30,14 +30,13 @@ if ($isConnect->query($sql) === TRUE) {
 }
 
 // Insert the data into the database:
-$insertData = " INSERT INTO Teams (id, name, player ) VALUES (3, 'MI', 'Rohit Sharma')";
+$insertData = " INSERT INTO Teams (id, name, player ) VALUES (5, 'MI', ' Boomarah')";
 if ($isConnect->query($insertData) === TRUE) {
     $last_id = $isConnect->insert_id;
     echo "New record created successfully. Last inserted ID is: " . $last_id . "<br/>" ;
 } else {
     echo "Data not entered in the Table" . $isConnect->error . "<br/>";
 }
-
 
 
 
