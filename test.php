@@ -152,6 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
 function test_data($data)
 {
     $data = trim($data);
@@ -175,15 +176,15 @@ function test_data($data)
         <input id="userid" type="hidden" />
 
         <lable for="firstname"> First Name: </lable>
-        <input id="firstname" name="firstname" type="text" value="<?php echo $dbSelected_fname;  ?>" />
+        <input id="firstname" name="firstname" type="text" value="<?php echo $dbSelected_fname ?? '' ;?>" />
         <span class="error"> <?php echo $fname_error; ?></span><br /><br />
 
         <lable for="lastname"> Last Name: </lable>
-        <input id="lastname" name="lastname" type="text" value="<?php echo $dbSelected_lname;  ?>" />
+        <input id="lastname" name="lastname" type="text" value="<?php echo $dbSelected_lname ?? '' ;?>" />
         <span class="error"> <?php echo $lname_error; ?> </span> <br /> <br />
 
         <label for="email"> Email: </label>
-        <input name="email" id="email" value="<?php echo $email;  ?>" />
+        <input name="email" id="email" value="<?php echo $email ?? '' ;?>" />
         <span class="error"> <?php echo $email_error; ?> </span> <br /> <br />
 
         <button name="submit_btn" id="submit_btn" type="submit">Submit</button>
