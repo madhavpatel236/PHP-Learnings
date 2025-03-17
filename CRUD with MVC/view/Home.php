@@ -1,20 +1,25 @@
 <?php
 
 include '../controller/userController.php';
-$obj = new userController();
 
-if (isset($_POST['submit_btn'])) {
-  $obj->insertUserData();
-  $dbData = $obj->fetchUserData();
-  // print_r($dbData);
-}
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  $obj = new userController();
+  $errors = $obj->validateUserData();
 
-if (isset($_POST['delete_btn'])) {
-  $obj->deleteUserData();
-}
+  if (isset($_POST['submit_btn'])) {
+    $obj->insertUserData();
+    $dbData = $obj->fetchUserData();
+    // print_r($dbData);
+  }
 
-if(isset($_POST['edit_btn'])){
-  $obj->updateUserData();
+  if (isset($_POST['delete_btn'])) {
+    $obj->deleteUserData();
+  }
+
+  if (isset($_POST['edit_btn'])) {
+    $errors = $obj->validateUserData();
+    $obj->updateUserData();
+  }
 }
 
 
@@ -41,7 +46,7 @@ if(isset($_POST['edit_btn'])){
         name="firstname"
         type="text"
         value="<?php echo $dbData['dbSelected_fname'] ?? ''; ?>" />
-      <span class="error"></span><br /><br />
+      <span class="error"> <?php echo $errors['fname_error']; ?> </span><br /><br />
 
       <lable for="lastname"> Last Name: </lable>
       <input
@@ -49,8 +54,7 @@ if(isset($_POST['edit_btn'])){
         name="lastname"
         type="text"
         value="<?php echo $dbData['dbSelected_lname'] ?? ''; ?>" />
-
-      <span class="error"></span> <br />
+      <span class="error"> <?php echo $errors['lname_error']; ?> </span> <br />
       <br />
 
       <label for="email"> Email: </label>
@@ -58,7 +62,7 @@ if(isset($_POST['edit_btn'])){
         name="email"
         id="email"
         value=" <?php echo $dbData['dbSelected_email'] ?? ''; ?>" />
-      <span class="error"></span> <br />
+      <span class="error"> <?php echo $errors['email_error']; ?> </span> <br />
       <br />
 
       <button name="submit_btn" id="submit_btn" type="submit">Submit</button>

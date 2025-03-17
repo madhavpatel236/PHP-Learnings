@@ -126,9 +126,6 @@ class UserModel
     }
 }
 
-
-
-
 // $obj = new UserModel();
 // $obj -> InsertData('parth', 'patel', 'parth@karavadiya.com');
 // print_r( $obj -> SelectData());
