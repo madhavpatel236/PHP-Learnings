@@ -33,4 +33,8 @@ class userController
   {
     $this->user->DeleteData();
   }
+  public function updateUserData(){
+    $this -> user -> UpdateData();
+  }
+
 }

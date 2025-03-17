@@ -2,20 +2,18 @@
 
 class UserModel
 {
-    public $lastId= '';
-
-    public $dbSelected_Data = array(
-        'dbSelected_fname' => '',
-        'dbSelected_lname' => '',
-        'dbSelected_email' => ''
-    );
-
+    public $lastId = '';
     protected $host = 'localhost';
     protected $username = 'root';
     protected $password = 'Madhav@123';
     protected $dbname = 'mvc_form';
     protected $isConnect;
 
+    public $dbSelected_Data = array(
+        'dbSelected_fname' => '',
+        'dbSelected_lname' => '',
+        'dbSelected_email' => ''
+    );
     public function __construct()
     {
         // create db:
@@ -34,8 +32,8 @@ class UserModel
     // add data
     public function InsertData($f_name, $l_name, $email_id)
     {
-        $fname = $f_name ;
-        $lname = $l_name ;
+        $fname = $f_name;
+        $lname = $l_name;
         $email = $email_id;
 
         // create table if not exists:
@@ -69,10 +67,10 @@ class UserModel
         $res = $this->isConnect->query($select);
         if ($res->num_rows > 0) {
             echo "<script> console.log('Data selected sucessfully!') </script>";
-            while( $row = $res->fetch_assoc()){
-                $this -> dbSelected_Data['dbSelected_fname'] = $row['FirstName'];
-                $this -> dbSelected_Data['dbSelected_lname'] = $row['LastName'];
-                $this -> dbSelected_Data['dbSelected_email'] = $row['Email'];
+            while ($row = $res->fetch_assoc()) {
+                $this->dbSelected_Data['dbSelected_fname'] = $row['FirstName'];
+                $this->dbSelected_Data['dbSelected_lname'] = $row['LastName'];
+                $this->dbSelected_Data['dbSelected_email'] = $row['Email'];
             }
             return $this->dbSelected_Data;
         } else {
@@ -81,16 +79,43 @@ class UserModel
         }
     }
 
-    public function DeleteData(){
-        $delete = " DELETE FROM Data WHERE Id = '$this->lastId' ";
-        if($this->isConnect->query($delete) == TRUE){
-            echo " <script> console.log('Data deleted sucessfully!'); </script> ";
-        } else{
-            echo " <script> console.log('*ERROR: Data was not deleted '); </script> ";
+    // delete
+    public function DeleteData()
+    {
+        $selectLatest = "SELECT * FROM Data ORDER BY Id DESC LIMIT 1";
+        $result = $this->isConnect->query($selectLatest);
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $lastid = $row['Id'];
+
+            $deleteval = "DELETE FROM Data WHERE Id = '$lastid' ";
+
+            if ($this->isConnect->query($deleteval)) {
+                $this->dbSelected_Data['dbSelected_fname'] = "";
+                $this->dbSelected_Data['dbSelected_lname'] = "";
+                $this->dbSelected_Data['dbSelected_email'] = "";
+                echo "<script>console.log('Record deleted successfully')</script>";
+            }
+        }
+    }
+
+    // update
+    public function UpdateData()
+    {
+        $fname = $this->dbSelected_Data['dbSelected_fname'];
+        $lname = $this->dbSelected_Data['dbSelected_lname'];
+        $email = $this->dbSelected_Data['dbSelected_email'];
+
+        $update = "UPDATE Data SET FirstName = '$fname', LastName = '$lname', Email = '$email' WHERE Id = '$this->lastId' ";
+
+        if ($this->isConnect->query($update) == TRUE) {
+            echo " <script> console.log('data updated sucessfully!'); </script> ";
+        } else {
+            echo " <script> console.log('*ERROR: data was not updated' ); </script> ";
         }
     }
 }
-
 
 
 

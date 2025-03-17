@@ -1,12 +1,20 @@
 <?php
 
 include '../controller/userController.php';
+$obj = new userController();
 
 if (isset($_POST['submit_btn'])) {
-  $obj = new userController();
   $obj->insertUserData();
   $dbData = $obj->fetchUserData();
   // print_r($dbData);
+}
+
+if (isset($_POST['delete_btn'])) {
+  $obj->deleteUserData();
+}
+
+if(isset($_POST['edit_btn'])){
+  $obj->updateUserData();
 }
 
 
@@ -60,7 +68,7 @@ if (isset($_POST['submit_btn'])) {
         <div> <span> First Name: <?php echo $dbData['dbSelected_fname']; ?> </span> </div>
         <div> <span> Last Name: <?php echo $dbData['dbSelected_lname']; ?> </span> </div>
         <div> <span> Email: <?php echo $dbData['dbSelected_email']; ?> </span> </div>
-        <button type="submit" onclick=" <?php $obj->deleteUserData(); ?>" name="delete_btn">Delete</button>
+        <button type="submit" name="delete_btn">Delete</button>
       </containor>
     </form>
   </body>
