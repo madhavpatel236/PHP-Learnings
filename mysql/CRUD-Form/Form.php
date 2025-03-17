@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = "root";
     $password = "Madhav@123";
     $myDB = "CRUD";
+    $lastid = "";
     $dbSelected_fname = "";
     $dbSelected_lname = "";
     $dbSelected_email = "";
@@ -90,6 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $selectData = " SELECT * FROM Data ORDER BY Id DESC LIMIT 1 ";
         $val = $isConnect->query($selectData);
         if ($val->num_rows > 0) {
+            $lastid = $isConnect->insert_id;
             echo "<script> console.log('Data selected sucessfully!') </script>";
             while ($row = $val->fetch_assoc()) {
                 // echo "First Name: " . $row['FirstName'] . "<br/>" . "Last Name: " . $row['LastName'] . "<br/>" . "Email: " . $row['Email'] . "<br/>";

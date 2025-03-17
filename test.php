@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = "Madhav@123";
     $myDB = "CRUD";
     $lastid = "";
+    $dbSelected_id = "";    
     $dbSelected_fname = "";
     $dbSelected_lname = "";
     $dbSelected_email = "";
@@ -80,7 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     if (isset($_POST['submit_btn'])) {
-
         if ($isEditing) {
             $update = "UPDATE Data SET FirstName='$firstname', LastName='$lastname', Email='$email' WHERE Id='$editId'";
             if ($isConnect->query($update)) {
@@ -95,6 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo " <script> console.log('Data sucessfully inserted into the db') </script> ";
             }
         }
+
 
         // SELECT data
         $selectData = " SELECT * FROM Data WHERE Id = '$lastid' ";
@@ -112,37 +113,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-
-    // DELETE
-    if (isset($_POST['delete_btn'])) {
-        // delete operation
-        $delete = " DELETE FROM Data WHERE Id = '$lastid' ";
-        if ($isConnect->query($delete)) {
-            echo " <script> console.log('data delete sucessfully'); </script> ";
-        } else {
-            echo " <script> console.log('data was not deleted '); </script> ";
-        }
-    }
-
-
-
-
-    $isEditing = false;
-    $editId = null;
     if (isset($_POST['edit_btn'])) {
-        $isEditing = true;
         $editId = $_POST['edit_btn'];
-
-        // Fetch the record to edit
         $selectData = "SELECT * FROM Data WHERE Id = '$editId'";
         $result = $isConnect->query($selectData);
+
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             $firstname = $row['FirstName'];
             $lastname = $row['LastName'];
             $email = $row['Email'];
+            $Flag = true;
+            $isEditing = true;
         }
     }
+
+    if (isset($_POST['delete_btn'])) {
+        $deleteId = $_POST['delete_btn'];
+        $delete = "DELETE FROM Data WHERE Id = '$deleteId'";
+
+        if ($isConnect->query($delete)) {
+            $dbSelected_fname = "";
+            $dbSelected_lname = "";
+            $dbSelected_email = "";
+            echo "<script>alert('Record deleted successfully!');</script>";
+        } else {
+            echo "<script>alert('Error deleting record!');</script>";
+        }
+    }
+
+
+
+
+    // // DELETE
+    // if (isset($_POST['delete_btn'])) {
+    //     // delete operation
+    //     $delete = " DELETE FROM Data WHERE Id = '$lastid' ";
+    //     if ($isConnect->query($delete)) {
+    //         echo " <script> console.log('data delete sucessfully'); </script> ";
+    //     } else {
+    //         echo " <script> console.log('data was not deleted '); </script> ";
+    //     }
+    // }
+
+    // $isEditing = false;
+    // $editId = null;
+    // if (isset($_POST['edit_btn'])) {
+    //     $isEditing = true;
+    //     $editId = $_POST['edit_btn'];
+
+    //     // Fetch the record to edit
+    //     $selectData = "SELECT * FROM Data WHERE Id = '$editId'";
+    //     $result = $isConnect->query($selectData);
+    //     if ($result->num_rows > 0) {
+    //         $row = $result->fetch_assoc();
+    //         $firstname = $row['FirstName'];
+    //         $lastname = $row['LastName'];
+    //         $email = $row['Email'];
+    //     }
+    // }
 }
 
 
@@ -187,50 +216,13 @@ function test_data($data)
             <div> <?php echo "First Name: " . $dbSelected_fname ?> </div>
             <div> <?php echo "Last Name: " . $dbSelected_lname ?> </div>
             <div> <?php echo "Email: " . $dbSelected_email ?> </div>
-            <button type="submit" name="edit_btn" value="<?php echo $lastid; ?>">Edit</button>
-            <button type="submit" name="delete_btn">Delete</button>
+            <!-- <button type="submit" name="edit_btn" value="<?php echo $lastid; ?>">Edit</button>
+            <button type="submit" name="delete_btn">Delete</button> -->
+            <button type="submit" name="edit_btn" value="<?php echo $dbSelected_id; ?>">Edit</button>
+            <button type="submit" name="delete_btn" value="<?php echo $dbSelected_id; ?>">Delete</button>
+
         </containor>
     </form>
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-// Insert data into the db
-// $info = "INSERT INTO Data (FirstName, LastName, Email) VALUES ( '$firstname', '$lastname', '$email' )";
-// if ($isConnect->query($info) !== TRUE) {
-// echo " <script>
-    console.log('*ERROR: Data Not inserted into the db')
-</script> ";
-// } else {
-// $lastid = $isConnect->insert_id;
-// echo " <script>
-    console.log('Data sucessfully inserted into the db')
-</script> ";
-// }
-
-
-// edit
-// if (isset($_POST['edit_btn'])) {
-// $Flag = true;
-// $edit = " UPDATE FROM Data SET FirstName = '$dbSelected_fname' LastName = '$dbSelected_lname' Email = '$dbSelected_email' ";
-// if ($isConnect->query($edit)) {
-// echo " <script>
-    console.log('data was Updated sucessfully');
-</script> ";
-// $dbSelected_fname = "";
-// $dbSelected_lname = "";
-// $dbSelected_email = "";
-// } else {
-// echo " <script>
-    console.log('*ERROR: data was not Updated');
-</script> ";
-// }
-// }
