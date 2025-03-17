@@ -14,7 +14,7 @@ class UserModel
         'dbSelected_lname' => '',
         'dbSelected_email' => ''
     );
-    
+
     public function __construct()
     {
         // create db:
@@ -123,10 +123,21 @@ class UserModel
                 echo " <script> console.log('*ERROR: data was not updated' ); </script> ";
             }
         }
-
     }
 }
 
 // $obj = new UserModel();
 // $obj -> InsertData('parth', 'patel', 'parth@karavadiya.com');
 // print_r( $obj -> SelectData());
+
+
+
+
+// Improvements:  make a abstact class and make a saperate classes for the each functionallity.
+
+// abstract class Main{
+    //     abstract function InsertData($fname, $lname, $email);
+    //     abstract function SelectData();
+    //     abstract function DeleteData();
+    //     abstract function UpdateData();
+    // }
