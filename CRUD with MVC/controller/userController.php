@@ -4,10 +4,10 @@ require '../model/userModel.php';
 
 class userController
 {
-  public $firstname = '';
-  public $lastname = '';
-  public $email = '';
-  public $user;
+  protected $firstname = '';
+  protected $lastname = '';
+  private $email = '';
+  protected $user;
 
   public function __construct()
   {
@@ -53,12 +53,13 @@ class userController
     }
 
     
-    if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-      $errors['email_error'] = " Please enter valid email address. ";
-    }
     if (empty($this->email)) {
       $errors['email_error'] = " Please enter a email address.";
     }
+    if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+      $errors['email_error'] = " Please enter valid email address. ";
+    }
+
     return $errors;
   }
 
@@ -76,6 +77,7 @@ class userController
   {
     $this->user->DeleteData();
   }
+
   public function updateUserData()
   {
     $this->user->UpdateData();

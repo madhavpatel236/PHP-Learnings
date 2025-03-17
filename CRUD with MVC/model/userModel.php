@@ -2,18 +2,19 @@
 
 class UserModel
 {
-    public $lastId = '';
-    protected $host = 'localhost';
-    protected $username = 'root';
-    protected $password = 'Madhav@123';
-    protected $dbname = 'mvc_form';
-    protected $isConnect;
+    private $lastId = '';
+    private $host = 'localhost';
+    private $username = 'root';
+    private $password = 'Madhav@123';
+    private $dbname = 'mvc_form';
+    private $isConnect;
 
     public $dbSelected_Data = array(
         'dbSelected_fname' => '',
         'dbSelected_lname' => '',
         'dbSelected_email' => ''
     );
+    
     public function __construct()
     {
         // create db:
@@ -25,7 +26,7 @@ class UserModel
             echo " <script> console.log('*ERROR: DB was not created.'); </script> ";
         }
 
-        // connect with the db
+        // connect db
         $this->isConnect = new mysqli($this->host, $this->username, $this->password, $this->dbname);
     }
 
