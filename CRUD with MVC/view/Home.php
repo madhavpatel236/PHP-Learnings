@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $obj = new userController();
   $errors = $obj->validateUserData();
 
-  if (isset($_POST['submit_btn'])) {
+  if (isset($_POST['submit_btn']) && empty($errors['fname_error']) && empty($errors['lname_error']) && empty($errors['email_error'])) {
     $obj->insertUserData();
     $dbData = $obj->fetchUserData();
     // print_r($dbData);
@@ -64,9 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         value=" <?php echo $dbData['dbSelected_email'] ?? ''; ?>" />
       <span class="error"> <?php echo $errors['email_error']; ?> </span> <br />
       <br />
-
       <button name="submit_btn" id="submit_btn" type="submit">Submit</button>
       <button type="submit" name="edit_btn">Submit Edit</button> <br />
+
       <br />
       <containor>
         <div> <span> First Name: <?php echo $dbData['dbSelected_fname']; ?> </span> </div>

@@ -37,41 +37,29 @@ class userController
     if (empty($this->firstname)) {
       $errors['fname_error'] = " Please enter a first name.";
     }
-    else {
-      $errors['fname_error'] = '';
-      test_data($this->firstname);
-    }
+
 
     if (strlen($this->lastname) <= 3) {
       $errors['lname_error'] = "Please enter atleast 3 char in the lastname";
-    } if (preg_match_all($spaces, $this->lastname)) {
+    }
+    if (preg_match_all($spaces, $this->lastname)) {
       $errors['lname_error'] = "non-alphabetical and non-digit character are not allowed";
-    } if (preg_match_all($digits, $this->lastname)) {
+    }
+    if (preg_match_all($digits, $this->lastname)) {
       $errors['lname_error'] = " Digits are not allowed";
-    } if (empty($this->lastname)) {
+    }
+    if (empty($this->lastname)) {
       $errors['lname_error'] = " Please enter a last name.";
-    } else {
-      $errors['lname_error'] = '';
-      test_data($this->lastname);
     }
 
+    
     if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
       $errors['email_error'] = " Please enter valid email address. ";
-    } if (empty($this->email)) {
+    }
+    if (empty($this->email)) {
       $errors['email_error'] = " Please enter a email address.";
-    } else {
-      $errors['email_error'] = '';
-      test_data($this->email);
     }
     return $errors;
-  }
-
-  public function test_data($data)
-  {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
   }
 
   public function insertUserData()
