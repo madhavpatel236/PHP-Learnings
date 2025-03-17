@@ -15,7 +15,6 @@ class userController
     $this->firstname = isset($_POST['firstname']) ? $_POST['firstname'] : '';
     $this->lastname = isset($_POST['lastname']) ? $_POST['lastname'] : '';
     $this->email = isset($_POST['email']) ? $_POST['email'] : '';
-    
     $this->user = new UserModel();
   }
 

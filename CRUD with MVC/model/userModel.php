@@ -103,17 +103,26 @@ class UserModel
     // update
     public function UpdateData()
     {
-        $fname = $this->dbSelected_Data['dbSelected_fname'];
-        $lname = $this->dbSelected_Data['dbSelected_lname'];
-        $email = $this->dbSelected_Data['dbSelected_email'];
+        $fname = $_POST['firstname'];
+        $lname = $_POST['lastname'];
+        $email = $_POST['email'];
 
-        $update = "UPDATE Data SET FirstName = '$fname', LastName = '$lname', Email = '$email' WHERE Id = '$this->lastId' ";
+        $selectLatest = "SELECT * FROM Data ORDER BY Id DESC LIMIT 1";
+        $result = $this->isConnect->query($selectLatest);
 
-        if ($this->isConnect->query($update) == TRUE) {
-            echo " <script> console.log('data updated sucessfully!'); </script> ";
-        } else {
-            echo " <script> console.log('*ERROR: data was not updated' ); </script> ";
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $lastid = $row['Id'];
+
+            $update = "UPDATE Data SET FirstName = '$fname', LastName = '$lname', Email = '$email' WHERE Id = '$lastid' ";
+
+            if ($this->isConnect->query($update)) {
+                echo " <script> console.log('data updated sucessfully!'); </script> ";
+            } else {
+                echo " <script> console.log('*ERROR: data was not updated' ); </script> ";
+            }
         }
+
     }
 }
 
