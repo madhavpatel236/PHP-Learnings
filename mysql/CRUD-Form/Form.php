@@ -84,6 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($isConnect->query($info) !== TRUE) {
             echo " <script> console.log('*ERROR: Data Not inserted into the db') </script> ";
         } else {
+            $lastid = $isConnect->insert_id;
             echo " <script> console.log('Data sucessfully inserted into the db') </script> ";
         }
 
@@ -91,7 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $selectData = " SELECT * FROM Data ORDER BY Id DESC LIMIT 1 ";
         $val = $isConnect->query($selectData);
         if ($val->num_rows > 0) {
-            $lastid = $isConnect->insert_id;
             echo "<script> console.log('Data selected sucessfully!') </script>";
             while ($row = $val->fetch_assoc()) {
                 // echo "First Name: " . $row['FirstName'] . "<br/>" . "Last Name: " . $row['LastName'] . "<br/>" . "Email: " . $row['Email'] . "<br/>";
@@ -126,9 +126,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email_to_delete = $dbSelected_email;
         $check_email = "SELECT * FROM Data WHERE Email = '$email_to_delete'";
         $result = $isConnect->query($check_email);
+        
+        $deleteVal = "DELETE FROM Data WHERE Email = '$email_to_delete'";
 
         if ($result->num_rows > 0) {
-            $deleteVal = "DELETE FROM Data WHERE Email = '$email_to_delete'";
             if ($isConnect->query($deleteVal) === TRUE) {
                 echo "<script> console.log('Record deleted successfully') </script>";
                 $dbSelected_fname = "";

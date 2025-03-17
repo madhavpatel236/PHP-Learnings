@@ -1,129 +1,272 @@
 <?php
-$servername = "localhost";
+$fname_error = $lname_error = $email_error = "";
+$firstname = $lastname = $email = "";
+$lastid = "";
+$dbSelected_id = "";
+$dbSelected_fname = "";
+$dbSelected_lname = "";
+$dbSelected_email = "";
+$Flag = false;
+$isEditing = false;
+$editId = null;
+$showLastRecord = false;
+
+// Database 
+$host = "localhost";
 $username = "root";
-$password = "";
-$db = "paymentapp";
+$password = "Madhav@123";
+$myDB = "CRUD";
 
-$conn = mysqli_connect($servername, $username, $password, $db);
-if ($conn) {
-  echo "The DB is connected Successfully<br>";
-} else {
-  echo "The DB is not connected successfully<br>" . $mysqli_connect_error();
-}
-if (isset($_POST['user_id']) && isset($_POST['delete_user'])) {
-  $id = intval($_POST['user_id']); // Ensure integer
-  $stmt = $conn->prepare("DELETE FROM users WHERE User_ID = ?");
-  $stmt->bind_param("i", $id);
-
-  if ($stmt->execute() && $stmt->affected_rows > 0) {
-    echo "User deleted successfully!";
-  } else {
-    echo "Error: User not found or already deleted.";
-  }
-
-  $stmt->close();
-  exit(); // Stop further execution
+function test_data($data)
+{
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
 }
 
-// Handle User Insertion and Editing
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["name"])) {
-  $name = htmlspecialchars(trim($_POST["name"]));
-  $email = htmlspecialchars(trim($_POST["email"]));
-  $city = htmlspecialchars(trim($_POST["city"]));
-  $user_id = isset($_POST["user_id"]) ? intval($_POST["user_id"]) : null;
-  $errors = [];
 
-  // Validation
-  if (empty($name) || strlen($name) < 4) {
-    $errors["name"] = "Name is required and must be at least 4 characters.";
-  }
-  if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $errors["email"] = "Valid email is required.";
-  } else {
-    $stmt = $conn->prepare("SELECT Email FROM users WHERE Email = ? AND User_ID != ?");
-    $stmt->bind_param("si", $email, $user_id);
-    $stmt->execute();
-    $stmt->store_result();
 
-    if ($stmt->num_rows > 0) {
-      $errors["email"] = "This email is already registered.";
-    }
-    $stmt->close();
+// Process form validation and submission
+if (isset($_POST['submit_btn'])) {
+  $isValid = true;
+
+  // Get form data and validate
+  $firstname = isset($_POST['firstname']) ? test_data($_POST['firstname']) : "";
+  $lastname = isset($_POST['lastname']) ? test_data($_POST['lastname']) : "";
+  $email = isset($_POST['email']) ? test_data($_POST['email']) : "";
+
+  // Validate first name
+  if (empty($firstname)) {
+    $fname_error = "Please enter your first name.";
+    $isValid = false;
+  } elseif (strlen($firstname) < 3) {
+    $fname_error = "Please enter minimum 3 characters in the first name.";
+    $isValid = false;
   }
 
-  if (empty($errors)) {
-    if ($user_id) {
-      // Update User
-      $stmt = $conn->prepare("UPDATE users SET Name = ?, Email = ?, City = ? WHERE User_ID = ?");
-      $stmt->bind_param("sssi", $name, $email, $city, $user_id);
-      $msg = "User updated successfully!";
+  // Validate last name
+  if (empty($lastname)) {
+    $lname_error = "Please enter your last name.";
+    $isValid = false;
+  } elseif (strlen($lastname) < 3) {
+    $lname_error = "Please enter minimum 3 characters in the last name.";
+    $isValid = false;
+  }
+
+  // Validate email
+  if (empty($email)) {
+    $email_error = "Please enter your email address.";
+    $isValid = false;
+  } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $email_error = "Please enter a valid email address.";
+    $isValid = false;
+  }
+
+  if ($isValid) {
+    if ($isEditing && !empty($_POST['edit_id'])) {
+      // Update
+      $updateId = $_POST['edit_id'];
+      $update = "UPDATE Data SET FirstName=?, LastName=?, Email=? WHERE Id=?";
+      $stmt = $isConnect->prepare($update);
+      $stmt->bind_param("sssi", $firstname, $lastname, $email, $updateId);
+
+      if ($stmt->execute()) {
+        echo "<script>alert('Record updated successfully!');</script>";
+        $lastid = $updateId;
+        $isEditing = false;
+        $showLastRecord = true;
+      } else {
+        echo "<script>alert('Error updating record: " . $stmt->error . "');</script>";
+      }
+      $stmt->close();
     } else {
-      // Insert New User
-      $stmt = $conn->prepare("INSERT INTO users (Name, Email, City) VALUES (?, ?, ?)");
-      $stmt->bind_param("sss", $name, $email, $city);
-      $msg = "User added successfully!";
+      // Insert
+      $info = "INSERT INTO Data (FirstName, LastName, Email) VALUES (?, ?, ?)";
+      $stmt = $isConnect->prepare($info);
+      $stmt->bind_param("sss", $firstname, $lastname, $email);
+
+      if ($stmt->execute()) {
+        $lastid = $isConnect->insert_id;
+        echo "<script>console.log('Data successfully inserted into the db');</script>";
+        $showLastRecord = true;
+      } else {
+        echo "<script>alert('Error inserting record: " . $stmt->error . "');</script>";
+      }
+      $stmt->close();
     }
+
+    if (!empty($lastid)) {
+      $selectData = "SELECT * FROM Data WHERE Id = ?";
+      $stmt = $isConnect->prepare($selectData);
+      $stmt->bind_param("i", $lastid);
+      $stmt->execute();
+      $result = $stmt->get_result();
+
+      if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $dbSelected_id = $row['Id'];
+        $dbSelected_fname = $row['FirstName'];
+        $dbSelected_lname = $row['LastName'];
+        $dbSelected_email = $row['Email'];
+      }
+      $stmt->close();
+    }
+  }
+}
+
+
+// Connect database
+$connection = new mysqli($host, $username, $password);
+if ($connection->connect_error) {
+  die("Connection failed: " . $connection->connect_error);
+}
+
+// Create database 
+$db = "CREATE DATABASE IF NOT EXISTS CRUD";
+if ($connection->query($db) === TRUE) {
+  echo "<script>console.log('Database created successfully!');</script>";
+} else {
+  echo "<script>console.log('ERROR: Database was not created: " . $connection->error . "');</script>";
+}
+
+$isConnect = new mysqli($host, $username, $password, $myDB);
+if ($isConnect->connect_error) {
+  die("Connection to database failed: " . $isConnect->connect_error);
+}
+
+// Create table 
+$table = "CREATE TABLE IF NOT EXISTS Data (
+Id INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+FirstName VARCHAR(30) NOT NULL,
+LastName VARCHAR(30) NOT NULL,
+Email VARCHAR(30) NOT NULL UNIQUE
+)";
+if ($isConnect->query($table) === TRUE) {
+  echo "<script>console.log('Table created successfully');</script>";
+} else {
+  echo "<script>console.log('ERROR: Table was not created: " . $isConnect->error . "');</script>";
+}
+
+// Edit 
+if (isset($_POST['edit_btn']) && !empty($_POST['edit_btn'])) {
+  $editId = $_POST['edit_btn'];
+  $selectData = "SELECT * FROM Data WHERE Id = ?";
+  $stmt = $isConnect->prepare($selectData);
+  $stmt->bind_param("i", $editId);
+  $stmt->execute();
+  $result = $stmt->get_result();
+
+  if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $firstname = $row['FirstName'];
+    $lastname = $row['LastName'];
+    $email = $row['Email'];
+    $isEditing = true;
+    $Flag = true;
+  }
+  $stmt->close();
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  // DELETE 
+  if (isset($_POST['delete_btn']) && !empty($_POST['delete_id'])) {
+    $deleteId = $_POST['delete_id'];
+    $delete = "DELETE FROM Data WHERE Id = ?";
+    $stmt = $isConnect->prepare($delete);
+    $stmt->bind_param("i", $deleteId);
 
     if ($stmt->execute()) {
-      echo "<p style='color: green;'>$msg</p>";
+      echo "<script>alert('Record deleted successfully!');</script>";
+      $firstname = $lastname = $email = "";
+      $dbSelected_fname = $dbSelected_lname = $dbSelected_email = "";
+      $showLastRecord = false;
     } else {
-      echo "<p style='color: red;'>Error: " . $conn->error . "</p>";
+      echo "<script>alert('Error deleting record: " . $stmt->error . "');</script>";
     }
     $stmt->close();
-  } else {
-    foreach ($errors as $error) {
-      echo "<p style='color: red;'>$error</p>";
-    }
   }
 }
+
+
+$isConnect->close();
+$connection->close();
 ?>
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
+  <title>CRUD Operation in Form</title>
 </head>
 
 <body>
-  <h1> Welcome To User Management System</h1>
-  <button id="addUserBtn">Add Yourself From Here</button>
-  <div class="overlay">
-    <div class="modal">
-      <h2 id="modalTitle">Add User</h2>
-      <form id="userForm" method="POST">
-        <input type="hidden" id="userId" name="user_id">
-        <label>Name:</label> <input type="text" id="name" name="name"><br>
-        <label>Email:</label> <input type="email" id="email" name="email"><br>
-        <label>City:</label> <input type="text" id="city" name="city"><br>
-        <button type="submit">Submit</button>
-        <button type="button" id="closeModal">Close</button>
-      </form>
-    </div>
+  <div class="form-container">
+    <h2><?php echo $isEditing ? 'Edit Record' : 'Add New Record'; ?></h2>
+
+    <form method="post">
+      <input type="hidden" name="edit_id" value="<?php echo $isEditing ? $editId : ''; ?>" />
+
+      <div class="form-group">
+        <label for="firstname">First Name:</label>
+        <input id="firstname" name="firstname" type="text" value="<?php echo htmlspecialchars($firstname); ?>" />
+        <span class="error"><?php echo $fname_error; ?></span>
+      </div>
+
+      <div class="form-group">
+        <label for="lastname">Last Name:</label>
+        <input id="lastname" name="lastname" type="text" value="<?php echo htmlspecialchars($lastname); ?>" />
+        <span class="error"><?php echo $lname_error; ?></span>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input id="email" name="email" type="email" value="<?php echo htmlspecialchars($email); ?>" />
+        <span class="error"><?php echo $email_error; ?></span>
+      </div>
+
+      <div class="form-group">
+        <button name="submit_btn" type="submit">
+          <?php echo $isEditing ? 'Update' : 'Submit'; ?>
+        </button>
+        <?php if ($isEditing): ?>
+          <a href="<?php echo $_SERVER['PHP_SELF']; ?>"><button type="button">Cancel</button></a>
+        <?php endif; ?>
+      </div>
+    </form>
+
+    <?php if ($showLastRecord && !empty($dbSelected_fname)): ?>
+      <div class="record-display">
+        <h3>Last Added/Updated Record</h3>
+        <div class="record-item">
+          <div class="record-row">
+            <span class="record-label">ID:</span>
+            <span><?php echo $dbSelected_id; ?></span>
+          </div>
+          <div class="record-row">
+            <span class="record-label">First Name:</span>
+            <span><?php echo htmlspecialchars($dbSelected_fname); ?></span>
+          </div>
+          <div class="record-row">
+            <span class="record-label">Last Name:</span>
+            <span><?php echo htmlspecialchars($dbSelected_lname); ?></span>
+          </div>
+          <div class="record-row">
+            <span class="record-label">Email:</span>
+            <span><?php echo htmlspecialchars($dbSelected_email); ?></span>
+          </div>
+          <div class="action-buttons">
+            <form method="post" style="display:inline;">
+              <button type="submit" name="edit_btn" value="<?php echo $dbSelected_id; ?>" class="edit-btn">Edit</button>
+            </form>
+            <form method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this record?');">
+              <input type="hidden" name="delete_id" value="<?php echo $dbSelected_id; ?>">
+              <button type="submit" name="delete_btn" class="delete-btn">Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    <?php endif; ?>
   </div>
-  <table>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Email</th>
-      <th>City</th>
-      <th>Actions</th>
-    </tr>
-    <?php
-    $result = mysqli_query($conn, "SELECT * FROM users");
-    while ($row = mysqli_fetch_assoc($result)) {
-      echo "<tr>";
-      echo "<td>{$row['User_ID']}</td>";
-      echo "<td>{$row['Name']}</td>";
-      echo "<td>{$row['Email']}</td>";
-      echo "<td>{$row['City']}</td>";
-      echo "<td>";
-      echo "<button class='btn-edit' data-id='{$row['User_ID']}' data-name='{$row['Name']}' data-email='{$row['Email']}' data-city='{$row['City']}'>Edit</button>";
-      echo "<button class='btn-delete' data-id='{$row['User_ID']}'>Delete</button>";
-      echo "</td>";
-      echo "</tr>";
-    }
-    ?>
-  </table>
-  
 </body>
 
 </html>
