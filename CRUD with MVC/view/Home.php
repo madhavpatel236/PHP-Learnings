@@ -1,8 +1,5 @@
 <?php
-
 include '../controller/userController.php';
-
-
 ?>
 
 <!DOCTYPE html>

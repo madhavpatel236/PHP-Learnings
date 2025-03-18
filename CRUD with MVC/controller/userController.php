@@ -12,11 +12,6 @@ class userController
 
   public function __construct()
   {
-    $this->firstname = isset($_POST['firstname']) ? $_POST['firstname'] : '';
-    $this->lastname = isset($_POST['lastname']) ? $_POST['lastname'] : '';
-    $this->email = isset($_POST['email']) ? $_POST['email'] : '';
-    $this->user = new UserModel();
-
     $spaces = "/\W/";
     $digits = "/\d/";
 
@@ -54,6 +49,12 @@ class userController
     if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
       $this->errors['email_error'] = " Please enter valid email address. ";
     }
+
+
+    $this->firstname = isset($_POST['firstname']) ? $_POST['firstname'] : '';
+    $this->lastname = isset($_POST['lastname']) ? $_POST['lastname'] : '';
+    $this->email = isset($_POST['email']) ? $_POST['email'] : '';
+    $this->user = new UserModel();
 
     // return $this->errors;
   }
