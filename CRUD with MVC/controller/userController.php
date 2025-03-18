@@ -55,7 +55,7 @@ class userController
       $this->errors['email_error'] = " Please enter valid email address. ";
     }
 
-    return $this->errors;
+    // return $this->errors;
   }
 
   public function insertUserData()

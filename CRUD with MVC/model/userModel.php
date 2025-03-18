@@ -1,14 +1,11 @@
 <?php
 
+require '../config.php';
+
 class UserModel
 {
+    public $isConnect;
     private $lastId = '';
-    private $host = 'localhost';
-    private $username = 'root';
-    private $password = 'Madhav@123';
-    private $dbname = 'mvc_form';
-    private $isConnect;
-
     public $dbSelected_Data = array(
         'dbSelected_fname' => '',
         'dbSelected_lname' => '',
@@ -16,18 +13,9 @@ class UserModel
     );
 
     public function __construct()
-    {
-        // create db:
-        $connect = new mysqli($this->host, $this->username, $this->password);
-        $db = "CREATE DATABASE IF NOT EXISTS mvc_form";
-        if ($connect->query($db) === TRUE) {
-            echo " <script> console.log('DB created sucessfully.'); </script> ";
-        } else {
-            echo " <script> console.log('*ERROR: DB was not created.'); </script> ";
-        }
-
-        // connect db
-        $this->isConnect = new mysqli($this->host, $this->username, $this->password, $this->dbname);
+    {   // db connection
+        $conf = new configuration();
+        $this->isConnect = $conf->dbConnection();
     }
 
     // add data
@@ -54,7 +42,7 @@ class UserModel
         // Insert the data in db
         $insert = " INSERT INTO Data (FirstName, LastName, Email) VALUES ( '$fname' , '$lname' , '$email')";
         if ($this->isConnect->query($insert) !== TRUE) {
-            echo " <script> console.log('*ERROR: data was not added in the db.'); </script> ";
+            echo  $this->isConnect->error . " <script> console.log('*ERROR: data was not added in the db.'); </script> ";
         } else {
             $this->lastId = $this->isConnect->insert_id;
             echo " <script> console.log('Data added into the db sucessfully.'); </script> ";

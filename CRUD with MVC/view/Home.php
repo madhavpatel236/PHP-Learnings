@@ -66,5 +66,5 @@ include '../controller/userController.php';
       -> view file cleanup- Done
       -> validation in the constructor - Done
       -> UserModel call in the Model 
-      -> make a saperate file for the db connection name- config and modify the model db calls. 
+      -> make a saperate file for the db connection name- config and modify the model db calls. - Done
 -->
