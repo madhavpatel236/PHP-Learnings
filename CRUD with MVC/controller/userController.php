@@ -4,10 +4,10 @@ require '../model/userModel.php';
 
 class userController
 {
+  public $user;
   protected $firstname = '';
   protected $lastname = '';
   private $email = '';
-  protected $user;
   public $errors = array("fname_error" => '', "lname_error" => '', "email_error" => '');
 
   public function __construct()

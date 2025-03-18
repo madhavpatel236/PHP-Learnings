@@ -6,6 +6,7 @@ class UserModel
 {
     public $isConnect;
     private $lastId = '';
+    // public $user;
     public $dbSelected_Data = array(
         'dbSelected_fname' => '',
         'dbSelected_lname' => '',
@@ -16,6 +17,8 @@ class UserModel
     {   // db connection
         $conf = new configuration();
         $this->isConnect = $conf->dbConnection();
+        // return $this->user = new UserModel();
+
     }
 
     // add data
