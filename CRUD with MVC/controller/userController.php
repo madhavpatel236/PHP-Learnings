@@ -4,7 +4,7 @@ require '../model/userModel.php';
 
 class userController
 {
-  public $user;
+  public $obj;
   protected $firstname = '';
   protected $lastname = '';
   private $email = '';
@@ -12,6 +12,13 @@ class userController
 
   public function __construct()
   {
+    // $this->obj = $userObject; 
+    $this->obj = $GLOBALS['userObject'];
+    $this->firstname = isset($_POST['firstname']) ? $_POST['firstname'] : '';
+    $this->lastname = isset($_POST['lastname']) ? $_POST['lastname'] : '';
+    $this->email = isset($_POST['email']) ? $_POST['email'] : '';
+    // $this->user = new UserModel();
+
     $spaces = "/\W/";
     $digits = "/\d/";
 
@@ -50,44 +57,37 @@ class userController
       $this->errors['email_error'] = " Please enter valid email address. ";
     }
 
-
-    $this->firstname = isset($_POST['firstname']) ? $_POST['firstname'] : '';
-    $this->lastname = isset($_POST['lastname']) ? $_POST['lastname'] : '';
-    $this->email = isset($_POST['email']) ? $_POST['email'] : '';
-    $this->user = new UserModel();
-
     // return $this->errors;
   }
 
   public function insertUserData()
   {
-    $this->user->InsertData($this->firstname, $this->lastname, $this->email);
+    $this->obj->InsertData($this->firstname, $this->lastname, $this->email);
   }
 
   public function fetchUserData()
   {
-    return $this->user->SelectData();
+    return $this->obj->SelectData();
   }
 
   public function deleteUserData()
   {
-    $this->user->DeleteData();
+    $this->obj->DeleteData();
   }
 
   public function updateUserData()
   {
-    $this->user->UpdateData();
+    $this->obj->UpdateData();
   }
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
   $obj = new userController();
 
   if (isset($_POST['submit_btn']) && empty($obj->errors['fname_error']) && empty($obj->errors['lname_error']) && empty($obj->errors['email_error'])) {
     $obj->insertUserData();
     $dbData = $obj->fetchUserData();
-    // print_r($dbData);
   }
 
   if (isset($_POST['delete_btn'])) {

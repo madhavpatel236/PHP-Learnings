@@ -6,7 +6,6 @@ class UserModel
 {
     public $isConnect;
     private $lastId = '';
-    // public $user;
     public $dbSelected_Data = array(
         'dbSelected_fname' => '',
         'dbSelected_lname' => '',
@@ -17,8 +16,6 @@ class UserModel
     {   // db connection
         $conf = new configuration();
         $this->isConnect = $conf->dbConnection();
-        // return $this->user = new UserModel();
-
     }
 
     // add data
@@ -39,7 +36,7 @@ class UserModel
         if ($this->isConnect->query($table) === TRUE) {
             echo " <script> console.log('Table created sucessfully.'); </script> ";
         } else {
-            echo " <script> console.log('*ERROR: Table was not created.'); </script> ";
+            echo  "<script> console.log('*ERROR: Table was not created.'); </script> ";
         }
 
         // Insert the data in db
@@ -117,18 +114,4 @@ class UserModel
     }
 }
 
-// $obj = new UserModel();
-// $obj -> InsertData('parth', 'patel', 'parth@karavadiya.com');
-// print_r( $obj -> SelectData());
-
-
-
-
-// Improvements:  make a abstact class and make a saperate classes for the each functionallity.
-
-// abstract class Main{
-    //     abstract function InsertData($fname, $lname, $email);
-    //     abstract function SelectData();
-    //     abstract function DeleteData();
-    //     abstract function UpdateData();
-    // }
+$userObject = new UserModel();
