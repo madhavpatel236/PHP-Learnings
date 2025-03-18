@@ -8,6 +8,7 @@ class userController
   protected $lastname = '';
   private $email = '';
   protected $user;
+  public $errors = array("fname_error" => '', "lname_error" => '', "email_error" => '');
 
   public function __construct()
   {
@@ -15,52 +16,46 @@ class userController
     $this->lastname = isset($_POST['lastname']) ? $_POST['lastname'] : '';
     $this->email = isset($_POST['email']) ? $_POST['email'] : '';
     $this->user = new UserModel();
-  }
 
-  // validation
-  public function validateUserData()
-  {
     $spaces = "/\W/";
     $digits = "/\d/";
 
-    $errors = array("fname_error" => '', "lname_error" => '', "email_error" => '');
 
     if (strlen($this->firstname) <= 3) {
-      $errors['fname_error'] = "Please enter atleast 3 char in the first name.";
+      $this->errors['fname_error'] = "Please enter atleast 3 char in the first name.";
     }
     if (preg_match_all($spaces, $this->firstname)) {
-      $errors['fname_error'] = "non-alphabetical character are not allowed";
+      $this->errors['fname_error'] = "non-alphabetical character are not allowed";
     }
     if (preg_match_all($digits, $this->firstname)) {
-      $errors['fname_error'] = " Digits are not allowed";
+      $this->errors['fname_error'] = " Digits are not allowed";
     }
     if (empty($this->firstname)) {
-      $errors['fname_error'] = " Please enter a first name.";
+      $this->errors['fname_error'] = " Please enter a first name.";
     }
 
 
     if (strlen($this->lastname) <= 3) {
-      $errors['lname_error'] = "Please enter atleast 3 char in the lastname";
+      $this->errors['lname_error'] = "Please enter atleast 3 char in the lastname";
     }
     if (preg_match_all($spaces, $this->lastname)) {
-      $errors['lname_error'] = "non-alphabetical and non-digit character are not allowed";
+      $this->errors['lname_error'] = "non-alphabetical and non-digit character are not allowed";
     }
     if (preg_match_all($digits, $this->lastname)) {
-      $errors['lname_error'] = " Digits are not allowed";
+      $this->errors['lname_error'] = " Digits are not allowed";
     }
     if (empty($this->lastname)) {
-      $errors['lname_error'] = " Please enter a last name.";
+      $this->errors['lname_error'] = " Please enter a last name.";
     }
 
-    
     if (empty($this->email)) {
-      $errors['email_error'] = " Please enter a email address.";
+      $this->errors['email_error'] = " Please enter a email address.";
     }
     if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-      $errors['email_error'] = " Please enter valid email address. ";
+      $this->errors['email_error'] = " Please enter valid email address. ";
     }
 
-    return $errors;
+    return $this->errors;
   }
 
   public function insertUserData()
@@ -81,5 +76,24 @@ class userController
   public function updateUserData()
   {
     $this->user->UpdateData();
+  }
+}
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  $obj = new userController();
+
+  if (isset($_POST['submit_btn']) && empty($obj->errors['fname_error']) && empty($obj->errors['lname_error']) && empty($obj->errors['email_error'])) {
+    $obj->insertUserData();
+    $dbData = $obj->fetchUserData();
+    // print_r($dbData);
+  }
+
+  if (isset($_POST['delete_btn'])) {
+    $obj->deleteUserData();
+  }
+
+  if (isset($_POST['edit_btn'])) {
+    $obj->updateUserData();
   }
 }

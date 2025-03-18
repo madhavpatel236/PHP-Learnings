@@ -2,25 +2,7 @@
 
 include '../controller/userController.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $obj = new userController();
-  $errors = $obj->validateUserData();
 
-  if (isset($_POST['submit_btn']) && empty($errors['fname_error']) && empty($errors['lname_error']) && empty($errors['email_error'])) {
-    $obj->insertUserData();
-    $dbData = $obj->fetchUserData();
-    // print_r($dbData);
-  }
-
-  if (isset($_POST['delete_btn'])) {
-    $obj->deleteUserData();
-  }
-
-  if (isset($_POST['edit_btn'])) {
-    $errors = $obj->validateUserData();
-    $obj->updateUserData();
-  }
-}
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         name="firstname"
         type="text"
         value="<?php echo $dbData['dbSelected_fname'] ?? ''; ?>" />
-      <span class="error"> <?php echo $errors['fname_error']; ?> </span><br /><br />
+      <span class="error"> <?php echo $obj->errors['fname_error']; ?> </span><br /><br />
 
       <lable for="lastname"> Last Name: </lable>
       <input
@@ -52,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         name="lastname"
         type="text"
         value="<?php echo $dbData['dbSelected_lname'] ?? ''; ?>" />
-      <span class="error"> <?php echo $errors['lname_error']; ?> </span> <br />
+      <span class="error"> <?php echo $obj->errors['lname_error']; ?> </span> <br />
       <br />
 
       <label for="email"> Email: </label>
@@ -60,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         name="email"
         id="email"
         value=" <?php echo $dbData['dbSelected_email'] ?? ''; ?>" />
-      <span class="error"> <?php echo $errors['email_error']; ?> </span> <br />
+      <span class="error"> <?php echo $obj->errors['email_error']; ?> </span> <br />
       <br />
       <button name="submit_btn" id="submit_btn" type="submit">Submit</button>
       <button type="submit" name="edit_btn">Submit Edit</button> <br />
@@ -77,3 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </body>
 
 </html>
+
+
+
+<!-- 
+      -> view file cleanup- Done
+      -> validation in the constructor - Done
+      -> UserModel call in the Model 
+      -> make a saperate file for the db connection name- config and modify the model db calls. 
+-->
