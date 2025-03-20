@@ -6,8 +6,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
     $email = $_POST['email'];
-    // $allowed = "/^[A-Za-z\s]+$/";
-
 
     // ---------- Validation ------------
 
@@ -16,8 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $fname_error = "Please enter your first name.";
         } elseif (strlen($firstname) <= 3) {
             $fname_error = " Please enter minimum 3 char in the firstname. ";
-        }
-         else {
+        } else {
             $fname_error = "";
             test_data($firstname);
         }
@@ -182,7 +179,7 @@ function test_data($data)
         <lable for="firstname"> First Name: </lable>
         <input id="firstname" name="firstname" type="text" value="<?php echo $dbSelected_fname ?? ''; ?>" />
         <span id="firstname_error" class="error">
-            <!-- <?php echo $fname_error; ?>  -->
+            <?php echo $fname_error; ?>
         </span><br /><br />
 
         <lable for="lastname"> Last Name: </lable>
@@ -209,7 +206,7 @@ function test_data($data)
 </body>
 
 <script>
-    // validation
+    // client side validation
     document.getElementById('userForm').addEventListener('submit', function(event) {
         event.preventDefault();
 
@@ -224,9 +221,9 @@ function test_data($data)
 
         let isValid = true;
 
-        let allowed = /^[A-Za-z\s]+$/;
+        let allowed = /^[A-Za-z\s]+$/; // for the firstname and lastname
 
-        // firstname error
+        // validate firstname 
         if (firstname == "") {
             isValid = false;
             firstname_error.innerText = "Please enter your firstname.";
@@ -240,7 +237,7 @@ function test_data($data)
             firstname_error.innerText = "";
         }
 
-        // lastname error
+        // validate lastname 
         if (lastname == "") {
             isValid = false;
             lastname_error.innerText = "Please enter your last name.";
@@ -254,7 +251,7 @@ function test_data($data)
             lastname_error.innerText = "";
         }
 
-        // email error
+        // validate email 
         if (email == "") {
             isValid = false;
             email_error.innerText = "Please enter your email address.";
@@ -263,7 +260,15 @@ function test_data($data)
         }
 
         if (isValid) {
-            this.submit();
+            const submitteer = event.submitter;
+            if (submitteer.name === "submit_btn") {
+                this.submit();
+            } else if (submitteer.name === "edit_btn") {
+                this.submit();
+            }
+            if (submitteer.name === "delete_btn") {
+                this.submit();
+            }
         }
     })
 </script>
