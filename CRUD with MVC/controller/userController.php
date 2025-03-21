@@ -12,7 +12,6 @@ class userController
 
   public function __construct()
   {
-    // $this->obj = $userObject; 
     $this->obj = $GLOBALS['userObject'];
     $this->firstname = isset($_POST['firstname']) ? $_POST['firstname'] : '';
     $this->lastname = isset($_POST['lastname']) ? $_POST['lastname'] : '';

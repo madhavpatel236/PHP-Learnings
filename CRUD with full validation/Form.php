@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     // Insert data into the db
-    if (isset($_POST['submit_btn']) && !$fname_error && !$fname_error && !$email_error) {
+    if (isset($_POST['submit_btn']) && !$fname_error && !$lname_error && !$email_error) {
         $info = "INSERT INTO Data (FirstName, LastName, Email) VALUES ( '$firstname', '$lastname', '$email' )";
         if ($isConnect->query($info) !== TRUE) {
             echo " <script> console.log('*ERROR: Data Not inserted into the db') </script> ";
@@ -208,12 +208,11 @@ function test_data($data)
 <script>
     // client side validation
     document.getElementById('userForm').addEventListener('submit', function(event) {
-        event.preventDefault();
+        // event.preventDefault();
 
         let firstname = document.forms['userForm']['firstname'].value;
         let lastname = document.forms['userForm']['lastname'].value;
         let email = document.forms['userForm']['email'].value;
-
 
         let firstname_error = document.getElementById('firstname_error');
         let lastname_error = document.getElementById('lastname_error');
@@ -259,16 +258,17 @@ function test_data($data)
             email_error.innerText = "";
         }
 
-        if (isValid) {
-            const submitteer = event.submitter;
-            if (submitteer.name === "submit_btn") {
-                this.submit();
-            } else if (submitteer.name === "edit_btn") {
-                this.submit();
-            }
-            if (submitteer.name === "delete_btn") {
-                this.submit();
-            }
+        
+        if (!isValid) {
+            event.preventDefault();
+            return false;
+        }
+
+        const submitter = event.submitter;
+        if (submitter.name === "submit_btn" || submitter.name === "edit_btn" || submitter.name === "delete_btn") {
+            return true; 
+        } else {
+            event.preventDefault();
         }
     })
 </script>
