@@ -1,6 +1,4 @@
 <?php
-
-$path = __FILE__;
 include "../controller/homeController.php";
 ?>
 

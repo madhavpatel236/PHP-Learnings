@@ -114,4 +114,5 @@ class UserModel
     }
 }
 
-$userObject = new UserModel();
+$userModelObject = new UserModel();
+echo "<pre>mmm"; print_r($userModelObject); exit;
