@@ -1,30 +1,33 @@
 <?php
+include "../config.php";
+// include "../controller/loginController.php";
 
-include '../config.php';
-include '../controller/loginController.php';
-
-class loginModel
+class login_Model
 {
     public $conf_email;
     public $conf_password;
-    public $errors;
+    public $ControllerObj;
 
     public function __construct()
     {
+        $this->ControllerObj = $GLOBALS['ControllerOBJ'];
         $this->conf_email = $GLOBALS['email'];
         $this->conf_password = $GLOBALS['password'];
-        $this->errors = $GLOBALS['errors'];
     }
-    function authentication($email, $password)
+
+    public function authentication($email, $password)
     {
-        if ($email === $this->conf_email && $password === $this->conf_password) {
-            echo " <script> console.log('Login sucessfull.') </script> ";
-            // header("Location: ../view/Home.php");
+        // echo $this->conf_email . "  , " .$this->conf_password. "<br/>";
+        // echo $email ." , " . $password;
+        if ($email == $this->conf_email && $password == $this->conf_password) {
+            echo " <script> console.log( 'Login sucessfull!!' ); </script> ";
+            header("Location: ./Home.php");
+            exit;
         } else {
-            echo " <script> console.log('cradential error!!!!') </script> ";
+            // $this->ControllerObj->errors['common_error'] = "Please enter valid email address";
+            echo " <script> console.log('*ERROR: credentials error!!');  </script> ";
         }
     }
 }
 
-// here we declare this obj because from this we can directlly access the obj at any where by simply include/require this file. 
-$loginModelOBJ = new loginModel();
+$modelObj = new login_Model();
